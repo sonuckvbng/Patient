@@ -8,6 +8,8 @@ import patient.in.dto.PatientReuestDto;
 import patient.in.exception.NotFoundException;
 import patient.in.service.PatientService;
 
+import java.util.List;
+
 @RestController
 public class PatientController {
 
@@ -27,9 +29,18 @@ public class PatientController {
 
     @GetMapping("/getall")
     public PatientResponseDto getPatientByIdAndName(@RequestBody PatientIdAndFnmDto patientIdAndFnmDto) throws NotFoundException {
-
          return  patientService.getPatientDetailsByIdAndFullName(patientIdAndFnmDto);
+    }
 
+    @GetMapping("/get-patients")
+    public List<PatientResponseDto> getPatientDetailOrderByName() throws NotFoundException {
+        return patientService.getPatientDetailOrderByName();
+    }
+
+    @GetMapping("/getdetails")
+    public List<PatientResponseDto> getAllPatientDetails(){
+       return patientService.getAllPatientDetails();
 
     }
+
 }

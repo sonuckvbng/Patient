@@ -12,6 +12,8 @@ import patient.in.entity.PatientEntity;
 import patient.in.exception.NotFoundException;
 import patient.in.repository.PatientRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,7 +72,7 @@ public class PatientServiceImpl  implements PatientService{
         PatientEntity patientByIdAndFullName = patientRepository.getPatientByPatientIdAndFullName(patientIdAndFnmDto.getPatientId(), patientIdAndFnmDto.getFullName());
         if(patientByIdAndFullName!=null){
             BeanUtils.copyProperties(patientByIdAndFullName,responseDto);
-            address.setPatientId(patientByIdAndFullName.getAddress().getPatientId());
+           // address.setPatientId(patientByIdAndFullName.getAddress().getPatientId());
             address.setAddrline1(patientByIdAndFullName.getAddress().getAddrline1());
             address.setAddrline2(patientByIdAndFullName.getAddress().getAddrline2());
             address.setPincode(patientByIdAndFullName.getAddress().getPincode());
@@ -80,5 +82,53 @@ public class PatientServiceImpl  implements PatientService{
             throw new NotFoundException("Data not found for the given id");
     }
 
+    @Override
+    public List<PatientResponseDto> getPatientDetailOrderByName() throws NotFoundException {
+        List<PatientResponseDto> patientResponseDtoList = new ArrayList<>();
+        PatientResponseDto patientResponseDto=new PatientResponseDto();
+        PatientAddress address=new PatientAddress();
+
+        List<PatientEntity> allPatientOrderByName = patientRepository.findAllPatientOrderByName();
+        if(allPatientOrderByName!=null){
+            for (PatientEntity patientEntity : allPatientOrderByName) {
+                BeanUtils.copyProperties(patientEntity, patientResponseDto);
+                address.setAddrline1(patientEntity.getAddress().getAddrline1());
+                address.setAddrline2(patientEntity.getAddress().getAddrline2());
+                address.setPincode(patientEntity.getAddress().getPincode());
+                patientResponseDto.setAddress(address);
+                patientResponseDtoList.add(patientResponseDto);
+            }
+            return patientResponseDtoList;
+        }else
+            throw new NotFoundException("Data not found for the given id");
     }
+
+    @Override
+    public List<PatientResponseDto> getAllPatientDetails() {
+
+        List<PatientResponseDto> patientResponseDtoList = new ArrayList<>();
+
+        PatientAddress address=new PatientAddress();
+
+        List<PatientEntity> allPatientDetails = patientRepository.findAll();
+        for (PatientEntity patientEntity : allPatientDetails) {
+            PatientResponseDto patientResponseDto=new PatientResponseDto();
+            BeanUtils.copyProperties(patientEntity, patientResponseDto);
+            address.setAddrline1(patientEntity.getAddress().getAddrline1());
+            address.setAddrline2(patientEntity.getAddress().getAddrline2());
+            address.setPincode(patientEntity.getAddress().getPincode());
+            patientResponseDto.setAddress(address);
+            patientResponseDtoList.add(patientResponseDto);
+        }
+        return patientResponseDtoList;
+
+   }}
+
+
+
+
+
+
+
+
 

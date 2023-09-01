@@ -17,8 +17,8 @@ import javax.persistence.Table;
 public class PatientAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="patId")
-    private Integer patientId;
+    @Column(name="addressId")
+    private Integer addressId;
     private  String addrline1;
     private  String addrline2;
     private Integer pincode;
